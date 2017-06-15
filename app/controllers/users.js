@@ -1,26 +1,27 @@
-module.exports = app => {
-	let controller = {};
-	const Users = app.libs.database.models.Users;
-	
-	controller.usersList = (req, res) => {
-		Users.findAll().then(data => {
-			res.json(data);
-		}).catch(err => {
-			res.send(err.message);
-		})
-	};
+import {models as Models} from '../../config/database';
 
-	controller.userCreate = (req, res) => {
-		Users.create({
-			name: req.body.name
-		}).then(data => {
-			res.json(data);
-		}).catch(err => {
-			res.send(err.message)
-		});
-	}
-	return controller;
+let controller = {};
+
+controller.usersList = (req, res) => {
+	Models.Users.findAll().then(data => {
+		res.json(data);
+	}).catch(err => {
+		res.send(err.message);
+	});
+};
+
+controller.userCreate = (req, res) => {
+	Models.Users.create({
+		name: req.body.name
+	}).then(data => {
+		res.json(data);
+	}).catch(err => {
+		res.send(err.message)
+	});
 }
+
+module.exports = controller;
+
 
 
 

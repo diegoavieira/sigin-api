@@ -25,9 +25,7 @@ router.use((req, res, next) => {
 });
 
 consign({cwd: 'app', verbose: false})
-	.include('libs/config.js')
-	.then('libs/database.js')
-	.then('controllers')
+	.include('controllers')
 	.then('routes')
 	.into(app);
 

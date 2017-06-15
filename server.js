@@ -1,13 +1,13 @@
-import app from './app/libs/express';
+import app from'./config/express';
+import {sequelize} from './config/database';
 
-app.libs.database.sequelize.authenticate().then(() => {
-		app.libs.database.sequelize.sync().done(() => {
-			app.listen(app.get('port'), () => {
-				console.log('Database connected successfuly.')
-				console.log(`Server running at ${app.get('port')}.`);
-			});
+sequelize.authenticate().then(() => {
+	sequelize.sync().done(() => {
+		app.listen(app.get('port'), () => {
+			console.log('Database connected successfuly.')
+			console.log(`Server running at ${app.get('port')}.`);
 		});
-	})
-	.catch(err => {
-		console.log('Unable to connect to the database: ', err.message);
 	});
+}).catch(err => {
+	console.log('Unable to connect to the database: ', err.message);
+});
