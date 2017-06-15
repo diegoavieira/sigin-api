@@ -1,0 +1,25 @@
+{
+  "name": "signin-api",
+  "version": "1.0.0",
+  "description": "API to do sign in with security",
+  "main": "server.js",
+  "scripts": {
+    "start": "babel-node server.js"
+  },
+  "author": "Diego A. Vieira <diegoavieira@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "body-parser": "^1.17.2",
+    "connect-flash": "^0.1.1",
+    "consign": "^0.1.5",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.15.3",
+    "express-session": "^1.15.3",
+    "method-override": "^2.3.9",
+    "pg": "^6.2.4",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^4.1.0"
+  }
+}
