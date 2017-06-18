@@ -1,32 +1,44 @@
 import express from 'express';
 import consign from 'consign';
+import morgan from 'morgan';
+import compress from 'compression'
 import bodyParser from 'body-parser';
 import methodOverride from 'method-override';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
-import flash from 'connect-flash';
+import {sessionSecret} from './config';
+import passport from 'passport';
 
 const app = express();
-const router = express.Router();
 
+if (process.env.NODE_ENV === 'development') {
+	app.use(morgan('dev'));
+} else if (process.env.NODE_ENV === 'production') {
+	app.use(compress());
+}
+
+app.set('view engine', 'ejs');
+app.set('views','./app/views');
 app.set('json spaces', 2);
 app.set('port', process.env.PORT || 3000);
-app.use(express.static('./public'));
-app.use(bodyParser.urlencoded({extended: false}));
+
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(cookieParser());
-
-router.use((req, res, next) => {
-	res.locals.currentUser = req.user;
-	res.locals.errors = req.flash('error');
-	res.locals.infos = req.flash('info');
-	next();
-});
+app.use(session({
+	secret: sessionSecret,
+	resave: true,
+	saveUninitialized: true
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 consign({cwd: 'app', verbose: false})
 	.include('controllers')
 	.then('routes')
 	.into(app);
+
+app.use(express.static('./public'));
 
 module.exports = app;

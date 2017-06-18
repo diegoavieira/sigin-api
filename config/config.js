@@ -1,11 +1,1 @@
-module.exports = {
-	database: 'daily-communion',
-	username: 'postgres',
-	password: '123456',
-	params: {
-		dialect: 'postgres',
-		define: {
-			underscored: true
-		}
-	} 
-}
+module.exports = require(`./env/${process.env.NODE_ENV}.js`);

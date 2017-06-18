@@ -1,7 +1,7 @@
 import Sequelize from 'sequelize';
 import fs from 'fs';
 import path from 'path';
-import config from './config';
+import {db as config} from './config';
 
 let db = null;
 
