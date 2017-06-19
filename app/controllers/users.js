@@ -1,4 +1,25 @@
 import {models as Models} from '../../config/database';
+import passport from 'passport';
+
+exports.authenticated = (req, res, next) => {
+	if (req.isAuthenticated()) {
+		next();
+	} else {
+		res.json({msg: 'Not authorized'});
+	}
+};
+
+exports.signin = passport.authenticate('local', {
+	successRedirect: '/',
+	failureRedirect: '/signin',
+	failureFlash: true
+});
+
+exports.signinError = (req, res) => {
+	if (!req.user) {
+		res.json({msg: req.flash('error')[0]});
+	};
+};
 
 exports.signup = (req, res, next) => {
 	Models.Users.create(
@@ -13,10 +34,14 @@ exports.signup = (req, res, next) => {
 	});
 };
 
+exports.signout = (req, res) => {
+	req.logout();
+	res.redirect('/');
+};
+
 exports.listAll = (req, res) => {
 	Models.Users.findAll({
 		attributes: {exclude: ['password']},
-		paranoid: false,
 		order: [['id', 'ASC']]
 	}).then(result => {
 		res.json(result);
@@ -26,9 +51,8 @@ exports.listAll = (req, res) => {
 };
 
 exports.listById = (req, res) => {
-	Models.Users.findById(req.params.id, {
-		attributes: {exclude: ['password']},
-		paranoid: false
+	Models.Users.findById(req.user.id, {
+		attributes: {exclude: ['password']}
 	}).then(result => {
 		res.json(result);
 	}).catch(error => {
@@ -38,7 +62,7 @@ exports.listById = (req, res) => {
 
 exports.updateById = (req, res, next) => {
 	Models.Users.findOne({
-		where: {id: req.params.id},
+		where: {id: req.user.id},
 		paranoid: false,
 	}).then(id => {
 		if (id) {
@@ -55,7 +79,7 @@ exports.updateById = (req, res, next) => {
 
 exports.deleteById = (req, res) => {
 	Models.Users.destroy({
-		where: {id: req.params.id}
+		where: {id: req.user.id}
 	}).then(result => {
 		res.json(result);
 	}).catch(error => {
@@ -63,26 +87,6 @@ exports.deleteById = (req, res) => {
 	});
 };
 
-exports.renderSignin = (req, res) => {
-	res.render('signin', {title: 'signin'});
-};
-
-exports.renderSignup = (req, res) => {
-	res.render('signup', {title: 'signup'});
-};
-
-exports.signout = (req, res) => {
-	req.logout();
-	res.redirect('/');
-};
-
-exports.authenticated = (req, res, next) => {
-	if (req.isAuthenticated()) {
-		next();
-	} else {
-		res.json({msg: 'Not authorized'});
-	}
-}
 
 
 

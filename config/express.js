@@ -8,6 +8,7 @@ import cookieParser from 'cookie-parser';
 import session from 'express-session';
 import {sessionSecret} from './config';
 import passport from 'passport';
+import flash from 'connect-flash';
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use(session({
 	resave: true,
 	saveUninitialized: true
 }));
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session());
 

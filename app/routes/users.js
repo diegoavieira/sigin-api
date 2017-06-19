@@ -5,23 +5,19 @@ module.exports = app => {
 
 	app.post('/signup', users.signup);
 
-	app.post('/signin', passport.authenticate('local', {
-		successRedirect: '/',
-		failureRedirect: '/signin',
-		failureFlash: false
-	}));
+	app.route('/signin')
+		.post(users.signin)
+		.get(users.signinError);
 
 	app.route('/users')
 		.all(users.authenticated)
 		.get(users.listAll);
 
-	app.route('/users/:id')
+	app.route('/user')
 		.all(users.authenticated)
 		.get(users.listById)
 		.put(users.updateById)
 		.delete(users.deleteById);
 
-	app.get('/signin', users.renderSignin);
-	app.get('/signup', users.renderSignup);
 	app.get('/signout', users.signout);
 };

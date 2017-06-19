@@ -1,5 +1,17 @@
-exports.renderIndex = (req, res) => {
+import {models as Models} from '../../config/database';
 
-	res.render('index', {name: req.user ? req.user.name : ''});
-
+exports.logged = (req, res) => {
+	if (req.user) {
+		res.json({
+			logged: {
+				name: req.user.name,
+				email: req.user.email,
+				date: new Date()
+			}
+		});
+	} else {
+		res.json({
+			msg: 'Do you not are logged'
+		});
+	};
 };

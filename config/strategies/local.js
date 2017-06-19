@@ -3,22 +3,30 @@ import {Strategy as LocalStrategy} from 'passport-local';
 import {models as Models} from '../database';
 
 module.exports = () => {
-	passport.use(new LocalStrategy((username, password, done) => {
+	const params = {
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true
+  }
+	passport.use(new LocalStrategy(params, (req, email, password, done) => {
 		Models.Users.findOne({
-			where: {username: username}
+			where: {email: email}
 		}).then(user => {
-			if (Models.Users.isPassword(user.password, password)) {
-				return done(null, user);
+			if (user) {
+				if (Models.Users.isPassword(user.password, password)) {
+					return done(null, user);
+				} else {
+					return done(null, false, {
+						message: 'Invalid password'
+					});
+				};
 			} else {
 				return done(null, false, {
-					message: 'Invalid password'
+					message: 'Unknown user'
 				});
-			};
-			return done(null, user);
+			}
 		}).catch(error => {
-			return done(error, null, {
-				message: 'Unknown user'
-			});
+			return done(error);
 		});
 	}));
 };
