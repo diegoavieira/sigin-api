@@ -9,6 +9,12 @@ module.exports = app => {
 		.post(users.signin)
 		.get(users.signinError);
 
+	app.get('/signout', users.signout);
+
+	app.get('/oauth/facebook', users.signinFacebook);
+
+	app.get('/oauth/facebook/callback', users.signinFacebookCallback);
+
 	app.route('/users')
 		.all(users.authenticated)
 		.get(users.listAll);
@@ -19,5 +25,4 @@ module.exports = app => {
 		.put(users.updateById)
 		.delete(users.deleteById);
 
-	app.get('/signout', users.signout);
 };

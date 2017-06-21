@@ -6,7 +6,7 @@ exports.authenticated = (req, res, next) => {
 		next();
 	} else {
 		res.json({msg: 'Not authorized'});
-	}
+	};
 };
 
 exports.signin = passport.authenticate('local', {
@@ -21,14 +21,36 @@ exports.signinError = (req, res) => {
 	};
 };
 
+exports.signinFacebook = passport.authenticate('facebook');
+
+exports.signinFacebookCallback = passport.authenticate('facebook', {
+	successRedirect: '/',
+	failureRedirect: '/signin',
+	failureFlash: true
+});
+
 exports.signup = (req, res, next) => {
-	Models.Users.create(
-		req.body
-	).then(result => {
-		req.login(result, error => {
-			if (error) return next(error);
-			res.json(result)
-		});
+	const params = {
+		name: req.body.name,
+		email: req.body.email,
+		password: req.body.password,
+		provider: 'local'
+	};
+	Models.Users.findOne({
+		where: {email: params.email}
+	}).then(user => {
+		if (user) {
+			res.json({msg: 'Email already registered.'})
+		} else {
+			Models.Users.create(params).then(result => {
+				req.login(result, error => {
+					if (error) return next(error);
+					res.redirect('/');
+				});
+			}).catch(error => {
+				res.status(412).json({msg: error.message});
+			});
+		}
 	}).catch(error => {
 		res.status(412).json({msg: error.message});
 	});
@@ -41,7 +63,7 @@ exports.signout = (req, res) => {
 
 exports.listAll = (req, res) => {
 	Models.Users.findAll({
-		attributes: {exclude: ['password']},
+		attributes: {exclude: ['password', 'provider', 'providerId']},
 		order: [['id', 'ASC']]
 	}).then(result => {
 		res.json(result);
@@ -52,7 +74,7 @@ exports.listAll = (req, res) => {
 
 exports.listById = (req, res) => {
 	Models.Users.findById(req.user.id, {
-		attributes: {exclude: ['password']}
+		attributes: {exclude: ['password', 'provider', 'providerId']},
 	}).then(result => {
 		res.json(result);
 	}).catch(error => {
@@ -62,8 +84,7 @@ exports.listById = (req, res) => {
 
 exports.updateById = (req, res, next) => {
 	Models.Users.findOne({
-		where: {id: req.user.id},
-		paranoid: false,
+		where: {id: req.user.id}
 	}).then(id => {
 		if (id) {
 			return id.updateAttributes(req.body);

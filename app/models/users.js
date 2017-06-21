@@ -9,32 +9,32 @@ module.exports = (sequelize, DataType) => {
 		},
 		name: {
 			type: DataType.STRING,
-			allowNull: false,
+			allowNull: true,
 		},
 		password: {
 			type: DataType.STRING,
 			allowNull: false,
-			validate: {
-				notEmpty: true
-			}
 		},
 		email: {
 			type: DataType.STRING,
 			unique: true,
 			allowNull: false,
 			validate: {
-				notEmpty: true,
 				isEmail: true
 			}
+		},
+		provider: {
+			type: DataType.STRING,
+			allowNull: false
+		},
+		providerId: {
+			type: DataType.STRING,
+			allowNull: true
 		}
 	}, {
 			schema: 'public',
 			hooks: {
 				beforeCreate: user => {
-					const salt = bcrypt.genSaltSync();
-					user.password = bcrypt.hashSync(user.password, salt);
-				},
-				beforeUpdate: user => {
 					const salt = bcrypt.genSaltSync();
 					user.password = bcrypt.hashSync(user.password, salt);
 				}

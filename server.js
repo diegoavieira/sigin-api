@@ -7,12 +7,16 @@ import passport from './config/passport';
 passport();
 
 sequelize.authenticate().then(() => {
-	sequelize.sync().done(() => {
-		app.listen(app.get('port'), () => {
-			console.log('Database connected successfuly.')
-			console.log(`Server running at ${app.get('port')}.`);
-		});
+	return sequelize.sync().then(() => {
+		console.log('Models are sync successfuly.');
+		console.log('Database connected successfuly.')
+	}).catch(error => {
+		console.log('Models not sync: ', error.message)
 	});
-}).catch(err => {
-	console.log('Unable to connect to the database: ', err.message);
+}).then(() => {
+	app.listen(app.get('port'), () => {
+		console.log(`Server running at ${app.get('port')}.`);
+	});
+}).catch(error => {
+	console.log('Unable to connect to the database: ', error.message);
 });
