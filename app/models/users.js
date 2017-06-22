@@ -13,7 +13,7 @@ module.exports = (sequelize, DataType) => {
 		},
 		password: {
 			type: DataType.STRING,
-			allowNull: false,
+			allowNull: true,
 		},
 		email: {
 			type: DataType.STRING,
@@ -35,6 +35,10 @@ module.exports = (sequelize, DataType) => {
 			schema: 'public',
 			hooks: {
 				beforeCreate: user => {
+					const salt = bcrypt.genSaltSync();
+					user.password = bcrypt.hashSync(user.password, salt);
+				},
+				beforeUpdate: user => {
 					const salt = bcrypt.genSaltSync();
 					user.password = bcrypt.hashSync(user.password, salt);
 				}

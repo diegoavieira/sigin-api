@@ -5,15 +5,15 @@ module.exports = app => {
 
 	app.post('/signup', users.signup);
 
-	app.route('/signin')
-		.post(users.signin)
-		.get(users.signinError);
+	app.route('/login')
+		.post(users.login)
+		.get(users.loginError);
 
-	app.get('/signout', users.signout);
+	app.get('/logout', users.logout);
 
-	app.get('/oauth/facebook', users.signinFacebook);
+	app.get('/auth/facebook', users.loginFacebook);
 
-	app.get('/oauth/facebook/callback', users.signinFacebookCallback);
+	app.get('/auth/facebook/callback', users.loginFacebookCallback);
 
 	app.route('/users')
 		.all(users.authenticated)
@@ -24,5 +24,4 @@ module.exports = app => {
 		.get(users.listById)
 		.put(users.updateById)
 		.delete(users.deleteById);
-
 };

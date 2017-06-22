@@ -16,14 +16,12 @@ module.exports = () => {
 		const profileData = {
 			email: profile.emails[0].value,
 			name: profile.displayName,
-			password: profile.id,
 			providerId: profile.id,
 			provider: 'facebook'
 		};
 		Models.Users.findOne({
 			where: {
-				providerId: profile.id,
-				provider: 'facebook'
+				providerId: profile.id
 			}
 		}).then(providerData => {
 			if (!providerData) {

@@ -9,23 +9,23 @@ exports.authenticated = (req, res, next) => {
 	};
 };
 
-exports.signin = passport.authenticate('local', {
+exports.login = passport.authenticate('local', {
 	successRedirect: '/',
-	failureRedirect: '/signin',
+	failureRedirect: '/login',
 	failureFlash: true
 });
 
-exports.signinError = (req, res) => {
+exports.loginError = (req, res) => {
 	if (!req.user) {
 		res.json({msg: req.flash('error')[0]});
 	};
 };
 
-exports.signinFacebook = passport.authenticate('facebook');
+exports.loginFacebook = passport.authenticate('facebook');
 
-exports.signinFacebookCallback = passport.authenticate('facebook', {
+exports.loginFacebookCallback = passport.authenticate('facebook', {
 	successRedirect: '/',
-	failureRedirect: '/signin',
+	failureRedirect: '/login',
 	failureFlash: true
 });
 
@@ -56,7 +56,7 @@ exports.signup = (req, res, next) => {
 	});
 };
 
-exports.signout = (req, res) => {
+exports.logout = (req, res) => {
 	req.logout();
 	res.redirect('/');
 };
@@ -90,7 +90,7 @@ exports.updateById = (req, res, next) => {
 			return id.updateAttributes(req.body);
 		} else {
 			res.status(404).json({msg: 'Unknown user'});	
-		}
+		};
 	}).then(result => {
 		res.json(result);
 	}).catch(error => {

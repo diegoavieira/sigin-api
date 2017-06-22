@@ -1,5 +1,5 @@
 {
-  "name": "signin-api",
+  "name": "login-api",
   "version": "1.0.0",
   "description": "API to do sign in with security",
   "main": "server.js",
