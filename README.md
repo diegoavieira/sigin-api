@@ -1,2 +1,2 @@
-# Sign in API
-## API to do sign in with security
+# Login API
+## API to do login with security

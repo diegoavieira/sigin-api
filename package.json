@@ -1,7 +1,7 @@
 {
   "name": "login-api",
   "version": "1.0.0",
-  "description": "API to do sign in with security",
+  "description": "API to do login with security",
   "main": "server.js",
   "scripts": {
     "start": "babel-node server.js"

@@ -1,6 +1,6 @@
 module.exports = {
 	db: {
-		database: 'signin-api',
+		database: 'login-api',
 		username: 'postgres',
 		password: '123456',
 		params: {
