@@ -1,5 +1,3 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-
 import app from './config/express';
 import {sequelize} from './config/database';
 import passport from './config/passport';

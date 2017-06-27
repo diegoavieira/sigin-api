@@ -13,15 +13,12 @@ module.exports = (sequelize, DataType) => {
 		},
 		password: {
 			type: DataType.STRING,
-			allowNull: true,
+			allowNull: false,
 		},
 		email: {
 			type: DataType.STRING,
 			unique: true,
-			allowNull: false,
-			validate: {
-				isEmail: true
-			}
+			allowNull: false
 		},
 		provider: {
 			type: DataType.STRING,

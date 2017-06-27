@@ -11,9 +11,9 @@ module.exports = app => {
 
 	app.get('/logout', users.logout);
 
-	app.get('/auth/facebook', users.loginFacebook);
+	app.get('/login/facebook', users.loginFacebook);
 
-	app.get('/auth/facebook/callback', users.loginFacebookCallback);
+	app.get('/login/facebook/callback', users.loginFacebookCallback);
 
 	app.route('/users')
 		.all(users.authenticated)

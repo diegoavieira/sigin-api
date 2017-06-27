@@ -8,25 +8,25 @@ module.exports = () => {
     passwordField: 'password',
     passReqToCallback: true
   }
-	passport.use(new LocalStrategy(params, (req, email, password, done) => {
+	passport.use(new LocalStrategy(params, (req, email, password, cb) => {
 		Models.Users.findOne({
 			where: {email: email}
 		}).then(user => {
 			if (user) {
 				if (Models.Users.isPassword(user.password, password)) {
-					return done(null, user);
+					return cb(null, user);
 				} else {
-					return done(null, false, {
+					return cb(null, false, {
 						message: 'Invalid password'
 					});
 				};
 			} else {
-				return done(null, false, {
+				return cb(null, false, {
 					message: 'Unknown user'
 				});
 			}
 		}).catch(error => {
-			return done(error);
+			return cb(error);
 		});
 	}));
 };
